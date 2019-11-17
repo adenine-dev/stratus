@@ -1,4 +1,5 @@
 #![feature(test)]
+#![feature(proc_macro)]
 
 #[macro_use]
 extern crate stratus;
@@ -12,6 +13,17 @@ fn takes_time() {
 #[test]
 fn use_macro() {
     time_scope!(std::thread::sleep(std::time::Duration::new(2, 0)));
+}
+
+
+#[timed_fn]
+fn use_proc_macro_fn() {
+    std::thread::sleep(std::time::Duration::new(2, 0));
+}
+
+#[test]
+fn use_proc_macro() {
+    use_proc_macro_fn();
 }
 
 #[test]
