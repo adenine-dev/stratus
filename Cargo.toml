@@ -7,4 +7,4 @@ license = "MIT"
 readme = "README.md"
 
 [dependencies]
-stratus-macros = { path = "../stratus-macros" }
+stratus-macros = { path = "./stratus-macros" }
