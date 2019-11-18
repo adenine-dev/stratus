@@ -3,6 +3,8 @@ name = "stratus-macros"
 version = "0.1.0"
 authors = ["alexa <alexa.griffin42@gmail.com>"]
 edition = "2018"
+description = "macros for stratus, probably should not be used on its own"
+license = "MIT"
 
 [lib]
 proc-macro = true
