@@ -4,6 +4,7 @@ use std::sync::Mutex;
 
 use std::time::{ SystemTime };
 
+/// A Profile is profiling data for a given bit of time recorded to the instrumentor.
 #[derive(Clone)]
 pub struct Profile {
     category: String,
@@ -15,6 +16,8 @@ pub struct Profile {
 }
 
 impl Profile {
+    /// creates a new profile, you probably want to use #[profiled] on a given function.
+    /// Otherwise category and name are values shown in the tracer.
     pub fn new(category: String, name: String) -> Profile {
         Profile {
             category,
@@ -26,10 +29,12 @@ impl Profile {
         }
     }
 
+    /// "stops" the profile recording, this actually just records the end time.
     pub fn stop(&mut self) {
         self.end_time = SystemTime::now();
     }
 
+    /// converts the given profile into json.
     pub fn to_json(&self, profiler_start: SystemTime) -> String {
         format!(
             r#"{{
@@ -46,7 +51,8 @@ impl Profile {
             ts = self.start_time.duration_since(profiler_start).expect("").as_millis(),
             dur = self.end_time.duration_since(self.start_time).expect("").as_millis(),
             pid = self.process,
-            tid = (format!("{:?}", self.thread)[9..10]).to_string()
+            //TODO: make this not awful because as is it is kinda bad
+            tid = (format!("{:?}", self.thread)[9..]).to_string()
         )
     }
 }
@@ -62,6 +68,9 @@ impl Drop for Profile {
 
 static INSTRUMENTOR: OnceCell<Mutex<Instrumentor>> = OnceCell::new();
 
+/// The instrumentor is the overarching class that handles the creation of 
+/// the json file that is fed into chrome://tracing (https://www.chromium.org/developers/how-tos/trace-event-profiling-tool)
+/// this is used as a singleton and you almost certainly don't want to make an instance of it.
 pub struct Instrumentor {
     active_session: bool,
     time_data: Vec<Profile>,
@@ -70,6 +79,7 @@ pub struct Instrumentor {
 }
 
 impl Instrumentor {
+    /// initializes the instrumentor
     pub fn init_instrumentor() {
         INSTRUMENTOR.get_or_init(|| {
             Mutex::new(Instrumentor {
@@ -81,6 +91,7 @@ impl Instrumentor {
         });
     }
 
+    /// start an intrumentation session. `name` will be the name of the json file. 
     pub fn start_session(name: &str) {
         let mut instrumentor = INSTRUMENTOR.get().expect("failed to get instrumentor").try_lock().unwrap();
         instrumentor.active_session = true;
@@ -89,10 +100,12 @@ impl Instrumentor {
         instrumentor.profiler_start = SystemTime::now();
     }
 
+    /// pushes a profile to the time data, this will be reflected in the resulting json
     pub fn push_profile(data: Profile) {
         INSTRUMENTOR.get().expect("failed to get instrumentor").try_lock().unwrap().time_data.push(data);
     }
 
+    /// this ends a session and writes the json file to the disk.
     pub fn end_session() {
         let instrumentor = INSTRUMENTOR.get().expect("failed to get instrumentor").try_lock().unwrap();
 
@@ -104,6 +117,6 @@ impl Instrumentor {
         }
 
         json.push_str("] }");
-        std::fs::write("data.json", json).expect("biggest oof");
+        std::fs::write([ &instrumentor.name, ".json" ].concat(), json).expect("biggest oof");
     }
 }

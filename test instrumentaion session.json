@@ -1,0 +1,41 @@
+{"traceEvents": [{
+                "name": "takes_time",
+                "cat": "funcion",
+                "ph": "X",
+                "ts": 1,
+                "dur": 104,
+                "pid": 21324,
+                "tid": "1)"
+            },{
+                "name": "timed_function",
+                "cat": "funcion",
+                "ph": "X",
+                "ts": 106,
+                "dur": 403,
+                "pid": 21324,
+                "tid": "1)"
+            },{
+                "name": "use_macro",
+                "cat": "funcion",
+                "ph": "X",
+                "ts": 512,
+                "dur": 107,
+                "pid": 21324,
+                "tid": "1)"
+            },{
+                "name": "use_proc_macro",
+                "cat": "funcion",
+                "ph": "X",
+                "ts": 622,
+                "dur": 215,
+                "pid": 21324,
+                "tid": "1)"
+            },{
+                "name": "with_label",
+                "cat": "funcion",
+                "ph": "X",
+                "ts": 842,
+                "dur": 310,
+                "pid": 21324,
+                "tid": "1)"
+            }] }
