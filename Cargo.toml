@@ -7,5 +7,5 @@ license = "MIT"
 readme = "README.md"
 
 [dependencies]
-stratus-macros = { path = "./stratus-macros" }
+stratus-macros = { version = "0.1.0", path = "./stratus-macros" }
 once_cell = "1.2.0"
