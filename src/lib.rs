@@ -1,8 +1,12 @@
-// #![warn(missing_docs)]
-#![feature(proc_macro)]
+#![warn(missing_docs)]
+
+//! TODO: write crate docs
 
 mod timer;
 pub use timer::*;
 
-#[macro_use] extern crate stratus_macros;
+mod instrumentor;
+pub use instrumentor::*;
+
+extern crate stratus_macros;
 pub use stratus_macros::*;
