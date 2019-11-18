@@ -5,6 +5,7 @@ authors = ["alexa <alexa.griffin42@gmail.com>"]
 edition = "2018"
 license = "MIT"
 readme = "README.md"
+description = "A profiling library for rust"
 
 [dependencies]
 stratus-macros = { version = "0.1.0", path = "./stratus-macros" }
